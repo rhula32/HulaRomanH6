@@ -7,7 +7,7 @@ public class MainMethod
   public static void main (String [] args) 
   {
     BinaryTree myTree = new BinaryTree();
-    File file = new File("test.txt");  
+    File file = new File("WinterWonderland.rtf");  
     int wordcount = 0;
     try 
     {
@@ -32,9 +32,9 @@ public class MainMethod
     }
     
     myTree.root = new Node("b");
-    myTree.root.left = new Node("a");
-    myTree.root.right = new Node("d");
-    myTree.root.right.left = new Node("c");
-    myTree.root.right.right = new Node("e");
+    myTree.root.leftNode = new Node("a");
+    myTree.root.rightNode = new Node("d");
+    myTree.root.rightNode.leftNode = new Node("c");
+    myTree.root.rightNode.rightNode = new Node("e");
   }
 }

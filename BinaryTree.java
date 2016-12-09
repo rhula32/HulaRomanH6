@@ -7,9 +7,9 @@ public class BinaryTree
     this.root = null;
   }
   
-  public void insert(String newKey) 
+  public void insert(String newWord) 
   {
-    Node newNode = new Node(newKey);
+    Node newNode = new Node(newWord);
     this.insert(this.root, newNode); 
   }
   
@@ -22,36 +22,36 @@ public class BinaryTree
     {
       this.root = newNode;
     }
-    else if (newNode.key.compareTo(subTree.key) == 0) 
+    else if (newNode.word.compareTo(subTree.word) == 0) 
     {
       subTree.count++; 
     }
-    else if (newNode.key.compareTo(subTree.key) < 0) 
+    else if (newNode.word.compareTo(subTree.word) < 0) 
     {
-      if (subTree.left == null) 
+      if (subTree.leftNode == null) 
       {
-        System.out.println("left " + newNode.key);
-        subTree.left = newNode;
+        System.out.println("left " + newNode.word);
+        subTree.leftNode = newNode;
         newNode.parent = subTree;
       }
       else 
       {
-        System.out.println("left " + newNode.key);
-        this.insert(subTree.left, newNode);
+        System.out.println("left " + newNode.word);
+        this.insert(subTree.leftNode, newNode);
       }
     }
     else 
     {
-      if (subTree.right == null) 
+      if (subTree.rightNode == null) 
       {
-        System.out.println("right " + newNode.key);
-        subTree.right = newNode;
+        System.out.println("right " + newNode.word);
+        subTree.rightNode = newNode;
         newNode.parent = subTree;
       }
       else 
       {
-        System.out.println("right " + newNode.key);
-        this.insert(subTree.right, newNode);
+        System.out.println("right " + newNode.word);
+        this.insert(subTree.rightNode, newNode);
       }
     }
   }
@@ -66,49 +66,55 @@ public class BinaryTree
     return(this.deleteNode(this.root, key));
   }
   
-  public boolean deleteNode(Node subTree, String key) 
+  public boolean deleteNode(Node subTree, String word) 
   {
-    System.out.println("deleteNode: " + key);
-    System.out.print("subTree: " + subTree.key);
-    System.out.print(" key: " + key);
-    System.out.println(" compareTo: " + key.compareTo(subTree.key));
+    System.out.println("deleteNode: " + word);
+    System.out.print("subTree: " + subTree.word);
+    System.out.print(" key: " + word);
+    System.out.println(" compareTo: " + word.compareTo(subTree.word));
     if (this.root == null) 
     {
       System.out.println("root == null");
       return(false);
     }
-    else if (key.compareTo(subTree.key) == 0) 
+    else if (word.compareTo(subTree.word) == 0) 
     {
-      this.insert(subTree.left, subTree.right);
+      this.insert(subTree.leftNode, subTree.rightNode);
       if (subTree == this.root) 
       {
-        this.root = subTree.left;
+        this.root = subTree.leftNode;
         this.root.parent = null;
       }
-      else if (subTree.left != null) 
+      else if (subTree.leftNode != null) 
       {
-        subTree.left.parent = subTree.parent;
-        subTree.parent.left = subTree.left;
+        subTree.leftNode.parent = subTree.parent;
+        subTree.parent.leftNode = subTree.leftNode;
       } 
-      else if (subTree.parent.left != null && subTree.parent.left.key.compareTo(key) == 0)
+      else if (subTree.parent.leftNode != null && subTree.parent.leftNode.word.compareTo(word) == 0)
       {
-        subTree.parent.left = null;
+        subTree.parent.leftNode = null;
       } 
-      else if (subTree.parent.right != null && subTree.parent.right.key.compareTo(key) == 0) 
+      else if (subTree.parent.rightNode != null && subTree.parent.rightNode.word.compareTo(word) == 0) 
       {
-        subTree.parent.right = null;
+        subTree.parent.rightNode = null;
       }
       return(true);
     }
-    else if (key.compareTo(subTree.key) > 0) 
+    else if (word.compareTo(subTree.word) > 0) 
     {
-      if (subTree.right == null) return(false);
-      this.deleteNode(subTree.right, key);
+      if (subTree.rightNode == null) 
+      {
+        return(false);
+      }
+      this.deleteNode(subTree.rightNode, word);
     }
     else 
     {
-      if (subTree.left == null) return(false);
-      this.deleteNode(subTree.left, key);
+      if (subTree.leftNode == null) 
+      {
+        return(false);
+      }
+      this.deleteNode(subTree.leftNode, word);
     }
     return(false);
   }
@@ -143,8 +149,8 @@ public class BinaryTree
     if (subTree != null)
     {
       subTree.print();
-      this.printPreOrder(subTree.left);
-      this.printPreOrder(subTree.right);    
+      this.printPreOrder(subTree.leftNode);
+      this.printPreOrder(subTree.rightNode);    
     }
   }
   
@@ -152,9 +158,9 @@ public class BinaryTree
   {
     if (subTree != null)
     {
-      this.printInOrder(subTree.left);
+      this.printInOrder(subTree.leftNode);
       subTree.print();
-      this.printInOrder(subTree.right);    
+      this.printInOrder(subTree.rightNode);    
     }
   }
   
@@ -162,8 +168,8 @@ public class BinaryTree
   {
     if (subTree != null)
     {
-      this.printPostOrder(subTree.left);
-      this.printPostOrder(subTree.right); 
+      this.printPostOrder(subTree.leftNode);
+      this.printPostOrder(subTree.rightNode); 
       subTree.print();
     }
   }
@@ -173,9 +179,9 @@ public class BinaryTree
     int size = 0;
     if (subTree != null)
     {
-      size = this.getSize(subTree.left);
+      size = this.getSize(subTree.leftNode);
       size ++;
-      size = size + this.getSize(subTree.right);    
+      size = size + this.getSize(subTree.rightNode);    
     }
     return(size);
   }
@@ -206,23 +212,23 @@ public class BinaryTree
 
 class Node 
 {
-  public String key;
+  public String word;
   public int count;
   public Node parent;
-  public Node left;
-  public Node right;
+  public Node leftNode;
+  public Node rightNode;
 
-  Node(String key) 
+  Node(String word) 
   { 
-    this.key = key; 
+    this.word = word; 
     this.count = 1;
     this.parent = null;
-    this.left = null;
-    this.right = null;
+    this.leftNode = null;
+    this.rightNode = null;
   }
   
   public void print() 
   {
-    System.out.println(key + " count: " + this.count);
+    System.out.println(word + " count: " + this.count);
   }
 }
