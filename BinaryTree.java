@@ -1,14 +1,59 @@
-import java.util.Scanner;
-import java.io.File;
-import java.io.FileNotFoundException;
-
-public class BinaryTree
+public class BinaryTree 
 {
   Node root;
   
-  BinaryTree()
-  {
+  BinaryTree() 
+  { 
     this.root = null;
+  }
+  
+  public void insert(String newKey) 
+  {
+    Node newNode = new Node(newKey);
+    this.insert(this.root, newNode); 
+  }
+  
+  public void insert(Node subTree, Node newNode) 
+  {
+    if (newNode == null) 
+    {
+    }
+    else if (this.root == null) 
+    {
+      this.root = newNode;
+    }
+    else if (newNode.key.compareTo(subTree.key) == 0) 
+    {
+      subTree.count++; 
+    }
+    else if (newNode.key.compareTo(subTree.key) < 0) 
+    {
+      if (subTree.left == null) 
+      {
+        System.out.println("left " + newNode.key);
+        subTree.left = newNode;
+        newNode.parent = subTree;
+      }
+      else 
+      {
+        System.out.println("left " + newNode.key);
+        this.insert(subTree.left, newNode);
+      }
+    }
+    else 
+    {
+      if (subTree.right == null) 
+      {
+        System.out.println("right " + newNode.key);
+        subTree.right = newNode;
+        newNode.parent = subTree;
+      }
+      else 
+      {
+        System.out.println("right " + newNode.key);
+        this.insert(subTree.right, newNode);
+      }
+    }
   }
   
   public boolean isEmpty() 
@@ -16,68 +61,168 @@ public class BinaryTree
     return this.root == null;
   }
   
-  public void insertNode(String newWord)
+  public boolean deleteNode(String key) 
   {
-    Node newNode = new Node(newWord);
-    if(this.isEmpty())
+    return(this.deleteNode(this.root, key));
+  }
+  
+  public boolean deleteNode(Node subTree, String key) 
+  {
+    System.out.println("deleteNode: " + key);
+    System.out.print("subTree: " + subTree.key);
+    System.out.print(" key: " + key);
+    System.out.println(" compareTo: " + key.compareTo(subTree.key));
+    if (this.root == null) 
     {
-      this.root = newNode;
+      System.out.println("root == null");
+      return(false);
     }
-    else
+    else if (key.compareTo(subTree.key) == 0) 
     {
-      Node current = this.root;
-      while(current != null)
+      this.insert(subTree.left, subTree.right);
+      if (subTree == this.root) 
       {
-        if(newWord.compareTo(current.word) >  0) 
-        {
-          if(current.right == null) 
-          {
-            current.right = newNode;
-          }
-          current = current.right;
-        }
-        else if(newWord.compareTo(current.word) < 0) 
-        {
-          if (current.left == null) 
-          {
-            current.left = newNode;
-          }
-          current = current.left;
-        }
-        else
-        {
-          current.count++;
-        }
+        this.root = subTree.left;
+        this.root.parent = null;
       }
+      else if (subTree.left != null) 
+      {
+        subTree.left.parent = subTree.parent;
+        subTree.parent.left = subTree.left;
+      } 
+      else if (subTree.parent.left != null && subTree.parent.left.key.compareTo(key) == 0)
+      {
+        subTree.parent.left = null;
+      } 
+      else if (subTree.parent.right != null && subTree.parent.right.key.compareTo(key) == 0) 
+      {
+        subTree.parent.right = null;
+      }
+      return(true);
+    }
+    else if (key.compareTo(subTree.key) > 0) 
+    {
+      if (subTree.right == null) return(false);
+      this.deleteNode(subTree.right, key);
+    }
+    else 
+    {
+      if (subTree.left == null) return(false);
+      this.deleteNode(subTree.left, key);
+    }
+    return(false);
+  }
+  
+  public void deleteTree() 
+  {
+    this.root = null;
+  }
+  
+  public void print(int traverseType) 
+  {
+    switch (traverseType) 
+    {
+      case 1:
+        this.printInOrder(this.root);
+        break;
+      case 2:
+        this.printPreOrder(this.root);
+        break;
+      case 3:
+        this.printPostOrder(this.root);
+        break;
+      default :
+        this.printInOrder(this.root);
+        break;
+    }
+    System.out.println("");
+  }
+  
+  public void printPreOrder(Node subTree) 
+  {
+    if (subTree != null)
+    {
+      subTree.print();
+      this.printPreOrder(subTree.left);
+      this.printPreOrder(subTree.right);    
     }
   }
   
-  
-  
-  public static void main(String[] args) 
+  public void printInOrder(Node subTree) 
   {
+    if (subTree != null)
+    {
+      this.printInOrder(subTree.left);
+      subTree.print();
+      this.printInOrder(subTree.right);    
+    }
+  }
+  
+  public void printPostOrder(Node subTree) 
+  {
+    if (subTree != null)
+    {
+      this.printPostOrder(subTree.left);
+      this.printPostOrder(subTree.right); 
+      subTree.print();
+    }
+  }
+  
+    public int getSize(Node subTree) 
+    {
+    int size = 0;
+    if (subTree != null)
+    {
+      size = this.getSize(subTree.left);
+      size ++;
+      size = size + this.getSize(subTree.right);    
+    }
+    return(size);
+  }
+  
+    public void findMiddle(int index) //CHANGE BACK TO NODE CLASS & FIX!
+    {
+      for (int i = 0; i <= index; i++) 
+      {
+        /// traverse until we get to ith node
+        // or something else?
+      }
+    }
+    
+    
+  public void balance(Node subTree) //FIX CODE!
+  {
+    // find middle of subtree
+    int size = getSize(subTree);
+    // find middle index, accounting for truncation
+    int middle = (int)(size/2+0.5);
+    
+    // make middle root
+    // balance left
+    // balance right
+    
   }
 }
 
 class Node 
 {
-  public String word;
+  public String key;
   public int count;
-  public Node parentNode;
+  public Node parent;
   public Node left;
   public Node right;
-  
-  Node(String word) 
+
+  Node(String key) 
   { 
-    this.word = word; 
+    this.key = key; 
     this.count = 1;
-    this.parentNode = null;
+    this.parent = null;
     this.left = null;
     this.right = null;
   }
   
-  public void printWord() 
+  public void print() 
   {
-    System.out.print(word + " " );
+    System.out.println(key + " count: " + this.count);
   }
 }
