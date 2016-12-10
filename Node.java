@@ -1,20 +1,22 @@
-public class Node
+public class Node 
 {
   String word;
-  Node left;
-  Node right;
-  
-  Node(String wo)
-  {
-    word = wo;
-    left = null;
-    right = null;
+  int count;
+  Node parentNode;
+  Node leftNode;
+  Node rightNode;
+
+  Node(String word) 
+  { 
+    this.word = word; 
+    this.count = 1;
+    this.parentNode = null;
+    this.leftNode = null;
+    this.rightNode = null;
   }
   
-  Node(String wo, Node leftLeaf, Node rightLeaf)
+  public void print() 
   {
-    word = wo;
-    left = leftLeaf;
-    right = rightLeaf;
+    System.out.println(word + " count: " + this.count);
   }
 }
